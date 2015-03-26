@@ -1,3 +1,24 @@
+
+import tweepy, random
+
+def read_api_keys():
+	file = open('.api_keys.txt')
+	api_keys_dict = {}
+		     
+	
+	for each_line in file:
+		line=each_line.rstrip('\n').split('=')
+		api_keys_dict[line[0]] = line[1]
+
+	auth = tweepy.OAuthHandler(api_keys_dict['CONSUMER_KEY'], api_keys_dict['CONSUMER_SECRET'])
+	auth.secure = True
+	auth.set_access_token(api_keys_dict['ACCESS_KEY'], api_keys_dict['ACCESS_SECRET'])
+	api = tweepy.API(auth)
+	return api 
+
+
+		
+
 #1. User flow
 #	 run script
 #	 look at tweeter
@@ -9,7 +30,7 @@
 #	create tweeter account 
 #	test tweeter API
 #	connect output of markov function to tweeter API
-import random
+
 
 text1 = 'Thanks God it is Friday.'
 text2 = 'Oh no it is Monday again.'
@@ -49,8 +70,7 @@ def make_dict(text):
 # print make_dict(text2)
 
 
-dict1 = make_dict(text1)
-dict2 = make_dict(text2)
+
 # markov chain for rendom text
 
 
@@ -66,12 +86,12 @@ def new_dict(dict1, dict2):
 		
 
   	
-unified_dict = new_dict(dict1,dict2)
+
   	
  	
 def make_text(unified_dict):
 	all_markov_dict_keys = unified_dict.keys()
-	print unified_dict
+# 	print unified_dict
  	tuple_key = random.choice(all_markov_dict_keys)
 #  	print touple_key
 	first_key_word = tuple_key[0]
@@ -97,15 +117,18 @@ def make_text(unified_dict):
 # 	print markov_text_list
 #  	print markov_string
  	return markov_string
-print make_text(unified_dict)
 
+#print make_text(unified_dict)
+
+api=read_api_keys() 
 	
 		
+dict1 = make_dict(text1)
+dict2 = make_dict(text2)
 		
+unified_dict = new_dict(dict1,dict2)		
 		
-		
-		
-
+api.update_status(status=make_text(unified_dict))
 
 
 	
